@@ -317,7 +317,6 @@ public class InventorySystem extends UserInterfaceContributionSystem {
 
     public void update(Bag bag) {
         inventory.update(bag);
-        actionBarSystem.updateGoldLabel(playerSystem.get().goldCount());
     }
 
     public void toggleExpanded() {

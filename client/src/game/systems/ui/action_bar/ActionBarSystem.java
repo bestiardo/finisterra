@@ -185,7 +185,9 @@ public class ActionBarSystem extends UserInterfaceContributionSystem {
         shotButton.setChecked(false);
     }
 
-    public void updateGoldLabel(int goldCount) {
+    public void updateGoldLabel() {
+        E player = playerSystem.get();
+        int goldCount = player.goldCount();
         goldLabel.setText(String.valueOf(goldCount));
     }
 
