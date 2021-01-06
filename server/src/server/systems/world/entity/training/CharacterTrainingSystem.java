@@ -59,7 +59,7 @@ public class CharacterTrainingSystem extends PassiveSystem {
     public void takeGold(int userId, int entityId) {
         int gold = getGold(entityId);
         E e = E(userId);
-        if (e.hasGold()) {
+        if (e.hasGold() && gold > 0) {
             e.getGold().setCount(e.getGold().getCount() + gold);
             EntityUpdate update = EntityUpdateBuilder
                     .of(userId)
