@@ -14,6 +14,7 @@ import server.systems.world.WorldEntitiesSystem;
 import shared.interfaces.Intervals;
 import shared.network.inventory.InventoryUpdate;
 import shared.network.inventory.ItemActionRequest;
+import shared.util.EntityUpdateBuilder;
 import shared.util.Messages;
 
 public class ItemActionSystem extends PassiveSystem {
@@ -61,15 +62,33 @@ public class ItemActionSystem extends PassiveSystem {
                 .findFirst()
                 .ifPresent(objectEntityId -> {
                     Object object = E.E(objectEntityId).getObject();
-                    int index = player.getBag().add(object.index, object.count, false);
-                    if (index >= 0) {
-                        Log.info("Adding item to index: " + index);
-                        InventoryUpdate update = new InventoryUpdate();
-                        update.add(index, player.bagItems()[index]);
-                        serverSystem.sendTo(connectionId, update);
-                        worldEntitiesSystem.unregisterEntity(objectEntityId);
+                    // object index 12 y 618 corresponden a las monedas de oro ver archivo obj.dat
+                    int monedasOro1 = 12, monedaOro2= 618;
+                    if (object.getIndex() == monedasOro1 || object.getIndex() == monedaOro2){
+                        int count = player.getGold().getCount() + object.count;
+                        player.goldCount(count);
+                        EntityUpdateBuilder resetUpdate = EntityUpdateBuilder.of(playerId);
+                        resetUpdate.withComponents(player.getGold());
+                        worldEntitiesSystem.sendEntityUpdate(playerId, resetUpdate.build());
+                        worldEntitiesSystem.notifyUpdate(playerId, EntityUpdateBuilder.of(playerId).withComponents(player.getGold()).build());
+                        serverSystem.sendTo( connectionId, new InventoryUpdate() );
+                        worldEntitiesSystem.unregisterEntity( objectEntityId );
+                        messageSystem.add( playerId, new ConsoleMessage
+                                ( "GOLD_GAIN", ConsoleMessage.Kind.WARNING,   String.valueOf(object.count)) );
+
                     } else {
-                        Log.info("Could not put item in inventory (FULL?)");
+                        int index = player.getBag().add( object.index, object.count, false );
+                        if(index >= 0) {
+                            Log.info( "Adding item to index: " + index );
+                            InventoryUpdate update = new InventoryUpdate();
+                            update.add( index, player.bagItems()[index] );
+                            serverSystem.sendTo( connectionId, update );
+                            worldEntitiesSystem.unregisterEntity( objectEntityId );
+                        } else {
+                            Log.info( "Could not put item in inventory (FULL?)" );
+                            messageSystem.add( playerId, new ConsoleMessage
+                                    ( "MULTIUSE", ConsoleMessage.Kind.INFO, " inventrio lleno ",  " ", " ", " " ) );
+                        }
                     }
                 });
     }
