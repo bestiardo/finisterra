@@ -40,8 +40,8 @@ public class DesktopLauncher {
         // Build LWJGL configuration
         Lwjgl3ApplicationConfiguration cfg = new Lwjgl3ApplicationConfiguration();
         cfg.setTitle("Finisterra - Argentum Online Java");
-        cfg.setWindowedMode(displayMode.width, displayMode.height);
-        //cfg.setFullscreenMode(displayMode);
+        cfg.setWindowedMode(/*displayMode.width, displayMode.height*/ video.getWidth(), video.getHeight() );
+        cfg.setFullscreenMode(displayMode);
         cfg.useVsync(video.getVsync());
         cfg.setIdleFPS(72);
         cfg.setResizable(initConfig.isResizeable());

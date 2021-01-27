@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.esotericsoftware.minlog.Log;
+import game.ClientConfiguration;
 import game.handlers.DefaultAOAssetManager;
 import game.systems.ui.console.ConsoleSystem;
 import game.utils.CursorSystem;
+import game.utils.Resources;
 import net.mostlyoriginal.api.system.core.PassiveSystem;
 import shared.util.Messages;
 
@@ -72,6 +74,16 @@ public class ScreenSystem extends PassiveSystem {
     }
 
     private void setWindowed() {
+        if (windowedWidth == 0 || windowedHeight == 0){
+            ClientConfiguration config = ClientConfiguration.loadConfig(Resources.CLIENT_CONFIG);
+            if (config == null) {
+                windowedWidth = 854;
+                windowedHeight = 480;
+            } else {
+                windowedWidth = config.getInitConfig().getVideo().getWidth();
+                windowedHeight = config.getInitConfig().getVideo().getHeight();
+            }
+        }
         Gdx.graphics.setWindowedMode(this.windowedWidth, this.windowedHeight);
         resolutionChanged();
     }

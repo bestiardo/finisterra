@@ -63,7 +63,7 @@ public class ClientConfiguration extends PassiveSystem {
         initConfig.setLanguage("es_AR");
         initConfig.setResizeable(true);
         initConfig.setDisableAudio(false);
-        initConfig.setStartMaximized(true);
+        initConfig.setStartMaximized(false);
 
         // Default values of `Init.Video`
         Init.Video video = new Init.Video();
@@ -71,6 +71,7 @@ public class ClientConfiguration extends PassiveSystem {
         video.setHeight(720);
         video.setVsync(true);
         video.setHiDPIMode("Logical");
+        video.setFullScreen(true);
         configOutput.getInitConfig().setVideo(video);
 
         // Default values of `Account`
@@ -183,6 +184,7 @@ public class ClientConfiguration extends PassiveSystem {
             private int height;
             private boolean vSync;
             private String HiDPI_Mode;
+            private boolean fullScreen;
 
             public int getWidth() {
                 return width;
@@ -214,6 +216,14 @@ public class ClientConfiguration extends PassiveSystem {
 
             private void setHiDPIMode(String HiDPI_Mode) {
                 this.HiDPI_Mode = HiDPI_Mode;
+            }
+
+            private void setFullScreen(boolean fullScreen) {
+                this.fullScreen = fullScreen;
+            }
+
+            public boolean isFullScreen() {
+                return fullScreen;
             }
         }
     }
