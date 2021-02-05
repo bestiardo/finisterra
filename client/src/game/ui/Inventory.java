@@ -212,7 +212,6 @@ public abstract class Inventory extends Window {
                 updateCount(item, i);
             }
         }
-
     }
 
     private void updateCount(Item item, int i) {

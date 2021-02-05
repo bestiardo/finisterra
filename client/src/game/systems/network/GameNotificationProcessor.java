@@ -11,6 +11,7 @@ import game.systems.PlayerSystem;
 import game.systems.camera.CameraShakeSystem;
 import game.systems.resources.SoundsSystem;
 import game.systems.ui.UserInterfaceSystem;
+import game.systems.ui.action_bar.ActionBarSystem;
 import game.systems.ui.action_bar.systems.InventorySystem;
 import game.systems.world.NetworkedEntitySystem;
 import shared.network.interfaces.DefaultNotificationProcessor;
@@ -71,6 +72,7 @@ public class GameNotificationProcessor extends DefaultNotificationProcessor {
             }
         });
         inventorySystem.update(bag);
+        getWorld().getSystem( ActionBarSystem.class ).updateGoldLabel();
     }
 
     @Override
