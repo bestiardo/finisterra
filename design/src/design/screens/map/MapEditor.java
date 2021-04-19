@@ -11,10 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.google.common.base.Objects;
 import component.position.WorldPos;
@@ -28,7 +25,6 @@ import design.screens.map.gui.MapPalette.Selection;
 import design.screens.map.gui.MapProperties;
 import design.screens.map.systems.MapDesignRenderingSystem;
 import design.screens.views.TileSetView;
-import game.ClientConfiguration;
 import game.handlers.DefaultAOAssetManager;
 import game.systems.camera.CameraSystem;
 import game.systems.map.MapManager;
@@ -65,6 +61,8 @@ public class MapEditor extends DesignScreen {
     private MapProperties mapProperties;
     private MapPalette mapPalette;
     private Deque<Undo> undoableActions = new ArrayDeque<>(50);
+    private int mapNum;
+    private TextField tf1;
 
     public MapEditor() {
         stage = new Stage() {
@@ -315,10 +313,17 @@ public class MapEditor extends DesignScreen {
 
         menus.add(createButton("Load", "default",
                 () -> {
-                    int map = 1;
-                    initMap(map);
+                    //int map = 1;
+                    mapNum = 0;
+                    mapNum = Integer.parseInt( tf1.getText());
+
+                    if (mapNum <= 0){
+                        mapNum = 1;
+                    }
+                    initMap( mapNum );
                 }, "Load map"))
                 .spaceLeft(5);
+        menus.add( createTF()).spaceLeft( 5 );
 
         menus.add(createButton("Save", "default",
                 () -> {
@@ -330,6 +335,12 @@ public class MapEditor extends DesignScreen {
                 .spaceLeft(5);
 
         return menus;
+    }
+
+    private TextField createTF() {
+        tf1 = new TextField( "1",SKIN, "default" );
+        tf1.setAlignment( 2 );
+        return tf1;
     }
 
     private Button createButton(String label, String style, Runnable listener, String tooltip) {
